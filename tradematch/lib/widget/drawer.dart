@@ -14,8 +14,10 @@ class _CustomDrawerState extends State<CustomDrawer>
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
 
-  final double _drawerHeightOffset = 200;
+  final List<double> drawerPosition = [60, 10, 0, 0];
+  final double _drawerHeightOffset = 50;
   final int drawerAnimation = 300;
+  double drawerWidth = 0;
 
   final double lineMax = 100;
   final double lineMin = 0;
@@ -25,16 +27,13 @@ class _CustomDrawerState extends State<CustomDrawer>
   final List<double> menuIconPosition = [10, 10, 0, 0];
   final double menuIconSize = 30;
 
-  final List<double> drawerPosition = [60, 10, 0, 0];
-
   final double drawerSideLineWidth = 5;
   final double drawerSideLineOffset = 20;
 
   final List<double> itemMargin = [20, 0];
   final double itemSpacing = 10;
 
-  double drawerWidth = 0;
-  double padding = 200;
+  double drawerPadding = 200;
 
   final double itemFontSize = 20;
 
@@ -44,6 +43,10 @@ class _CustomDrawerState extends State<CustomDrawer>
     {'icon': Icons.settings, 'text': 'SETTINGS', 'route': '/settings'},
     {'icon': Icons.person, 'text': 'PROFILE', 'route': '/profile'},
   ];
+
+  late final Map<String, GlobalKey> _itemKeys;
+
+  double totalItemHeight = 0;
 
   @override
   void initState() {
@@ -57,6 +60,12 @@ class _CustomDrawerState extends State<CustomDrawer>
       end: Offset.zero,
     ).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+
+    _itemKeys = {for (var item in _menuItems) item['text']: GlobalKey()};
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _calculateTotalHeight(),
     );
   }
 
@@ -79,12 +88,14 @@ class _CustomDrawerState extends State<CustomDrawer>
     required IconData icon,
     required String text,
     required VoidCallback onTap,
+    required GlobalKey key,
   }) {
     double lineWidth = 0;
 
     return StatefulBuilder(
       builder: (context, setState) {
         return InkWell(
+          key: key,
           onTap: onTap,
           onHover: (hovering) {
             setState(() {
@@ -127,6 +138,22 @@ class _CustomDrawerState extends State<CustomDrawer>
     return textPainter.size.width;
   }
 
+  void _calculateTotalHeight() {
+    double height = 0;
+
+    for (var item in _menuItems) {
+      final key = _itemKeys[item['text']]!;
+      final context = key.currentContext;
+      if (context != null) {
+        height += context.size?.height ?? 0;
+      }
+    }
+
+    setState(() {
+      totalItemHeight = height;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -163,26 +190,27 @@ class _CustomDrawerState extends State<CustomDrawer>
                 ),
                 width:
                     drawerWidth +
-                    padding +
+                    drawerPadding +
                     drawerSideLineOffset +
                     drawerPosition[1],
-                height:
-                    MediaQuery.of(context).size.height - _drawerHeightOffset,
+                height: totalItemHeight + _drawerHeightOffset,
                 child: Row(
                   children: [
                     Container(
                       width: drawerSideLineWidth,
-                      height: MediaQuery.of(context).size.height,
+                      height: totalItemHeight + _drawerHeightOffset,
                       margin: EdgeInsets.only(right: drawerSideLineOffset),
                       color: drawerSideLine,
                     ),
                     Container(
-                      width: drawerWidth + padding,
+                      width: drawerWidth + drawerPadding,
                       color: drawerBackgroundColor,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children:
                             _menuItems.map((item) {
                               return customHoverTile(
+                                key: _itemKeys[item['text']]!,
                                 context,
                                 icon: item['icon'],
                                 text: item['text'],
