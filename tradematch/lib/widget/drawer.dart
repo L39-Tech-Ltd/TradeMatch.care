@@ -40,7 +40,7 @@ class _CustomDrawerState extends State<CustomDrawer>
   // Menu items
   final List<Map<String, dynamic>> _menuItems = [
     {'icon': Icons.home, 'text': 'HOME', 'route': '/home'},
-    {'icon': Icons.settings, 'text': 'SETTINGS', 'route': '/settings'},
+    {'icon': Icons.settings, 'text': 'TEST', 'route': '/test'},
     {'icon': Icons.person, 'text': 'PROFILE', 'route': '/profile'},
   ];
 
