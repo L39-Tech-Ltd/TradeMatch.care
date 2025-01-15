@@ -37,7 +37,9 @@ CustomTransitionPage _smoothPageTransition(
       // Change the opacity of the screen using a Curve based on the the animation's
       // value
       return FadeTransition(
-        opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+        opacity: CurveTween(
+          curve: Curves.fastEaseInToSlowEaseOut,
+        ).animate(animation),
         child: child,
       );
     },

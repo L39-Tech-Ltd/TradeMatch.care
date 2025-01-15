@@ -21,11 +21,36 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           Container(decoration: forestBackground),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: const Color.fromARGB(164, 222, 255, 195),
+          widgets.CustomScrollWidget(
+            sections: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: const Color.fromARGB(164, 222, 255, 195),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: const Color.fromARGB(163, 195, 246, 255),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: const Color.fromARGB(162, 255, 219, 195),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: const Color.fromARGB(162, 255, 195, 240),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: const Color.fromARGB(162, 254, 255, 195),
+              ),
+            ],
           ),
+
           widgets.CustomDrawer(),
         ],
       ),
