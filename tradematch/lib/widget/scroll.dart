@@ -95,7 +95,7 @@ class _CustomScrollWidgetState extends State<CustomScrollWidget> {
         Positioned(
           top:
               MediaQuery.of(context).size.height / 2 - numberCarouselHeight / 2,
-          right: 20,
+          right: 0,
           child: Container(
             color: drawerBackgroundColor,
             child: Column(
